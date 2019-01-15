@@ -1,25 +1,23 @@
-% a 64 channel filter-bank simulation based on monotonic filters having 8
-% movable loss-poles; next to adjacent containment better than -110dB
+% a 64 channel filter-bank simulation based on monotonic filters having 4
+% movable loss-poles
 
 N = 64;
 delta_f = 1/N;
 %w_shift = pi*j;
 w_shift = 0.0j;
-p = [-0.3 -0.2 -0.1 -0.06 0.06 0.1 0.2 0.3]; % initial guess at finite loss poles
+% initial guess at finite loss poles
+p = [-delta_f*2.5 -delta_f*1.5 delta_f*1.5 delta_f*2.5];
 ni=1; % number of loss poles at infinity
 wp = []; ws = [];
 wp(1) = -delta_f/2; % lower passband edge
 wp(2) = delta_f/2; % upper passband edge
-ws = [-0.49 -delta_f delta_f 0.49];
+ws = [-0.49 -delta_f*0.75 delta_f*0.75 0.49];
 as = [50 50 50 50];
-Ap = 2.13; % the passband ripple in dB
-px = [];
+Ap = 0.51; % the passband ripple in dB
+px = [-delta_f*1.0 delta_f*1.0];
 ONE_STP = 0;
-% A positive-pass continuous-time filter with a elliptic pass-band
 
-svSpecs = {p, px, wp, ws};
-
-H1 = dsgnDigitalFltr(p, px, ni, wp, ws, as, Ap, 'monotonic');
+H1 = dsgnDigitalFltr(p, px, ni, wp, ws, as, Ap, 'elliptic');
 plot_drsps(H1, wp, ws, 'b', [-0.5 0.5 -120 1]);
 cscdFltr1 = mkCscdFltrD(H1, wp);
 %cscdFltr1.plotGn(wp, ws, -100, 2);
@@ -39,11 +37,11 @@ hold(ax2, 'on');
 sum = Out(:,1);
 for i = 2:N
     plotRspns(Out(:,i), [-0.5 0.5], 'b', ylim);
-    sum = sum + Out(:,i);
+    if (i~= 40)
+        sum = sum + Out(:,i);
+    end
 end
 plotRspns(sum, [-0.5 0.5], 'r', ylim);
-corr32 = Out(:,32) .* Out(:,31).*j;
-plotRspns(corr32, [-0.5 0.5], 'm', ylim);
 toc
 
 a=1;

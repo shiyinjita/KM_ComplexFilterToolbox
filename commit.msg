@@ -1,2 +1,1 @@
-Added FltrBnk_1_6_0e.m, a 64 channel filter bank having 0.51dB equiripple for each channel
-and channel 40 set to 0 as an example of notching out an interferer
+Added go realization files to implement 64 channel filter bank of FltrBnk_1_6_0e.m. Also, FltrBnk_1_6_0e.m was modified to output suitable yaml file describing filter coefficients that go program needs to load. Go realization is about 19 times faster than Matlab (without using concurency - this is next)

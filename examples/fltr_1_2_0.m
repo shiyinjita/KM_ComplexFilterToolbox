@@ -69,7 +69,7 @@ lim = [-5 15 -40 1];
 [gn, db] = plot_lddr(H, lddr, wp*sclFctr, ws*sclFctr, 'b', lim);
 
 % Denormalize the ladder filte
-lddr.scale(1/sclFctr)
+lddr.freqScale(1/sclFctr)
 lddr.freqShft(-shftFctr);
 dispLddr(lddr);
 % denormalize the transfer function
